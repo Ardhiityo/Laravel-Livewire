@@ -42,6 +42,8 @@
                     @if ($isUpdate)
                         <button type="button" class="btn btn-primary" wire:click='update'
                             name="submit">UPDATE</button>
+                        <button type="button" class="btn btn-secondary" wire:click='clear'
+                            name="submit">CLEAR</button>
                     @else
                         <button type="button" class="btn btn-primary" wire:click='store' name="submit">SIMPAN</button>
                     @endif
