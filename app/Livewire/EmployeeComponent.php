@@ -67,12 +67,28 @@ class EmployeeComponent extends Component
         session()->flash('notes', 'Berhasil diperbarui');
     }
 
+    public function deleteConfirm($id)
+    {
+        $this->employeeId = $id;
+    }
+
+    public function delete()
+    {
+        $employee = Employee::findOrFail($this->employeeId);
+        $employee->delete();
+
+        $this->clear();
+
+        session()->flash('notes', 'Berhasil dihapus');
+    }
+
     public function clear()
     {
         $this->name = '';
         $this->email = '';
         $this->address = '';
         $this->isUpdate = false;
+        $this->employeeId = null;
     }
 
     public function render()
