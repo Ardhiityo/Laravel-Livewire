@@ -57,6 +57,9 @@
     <div class="my-3 p-3 bg-body rounded shadow-sm">
         <h1>Data Pegawai</h1>
         <div class="my-3 d-flex justify-content-end">
+            <input type="text" class="form-control w-25" placeholder="Cari pegawai..." wire:model.live='search'>
+        </div>
+        <div class="my-3 d-flex justify-content-end">
             {{ $employees->links() }}
         </div>
         <table class="table table-striped">

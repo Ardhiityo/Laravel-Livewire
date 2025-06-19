@@ -15,6 +15,7 @@ class EmployeeComponent extends Component
     public $address;
     public $employeeId;
     public $isUpdate = false;
+    public $search;
     protected $paginationTheme = 'bootstrap';
 
 
@@ -94,6 +95,16 @@ class EmployeeComponent extends Component
     public function render()
     {
         $employees = Employee::orderByDesc('id')->paginate(5);
+
+        if ($this->search) {
+            $employees = Employee::whereLike('name', '%' . $this->search . '%')
+                ->orWhereLike('email', '%' . $this->search . '%')
+                ->orWhereLike('address', '%' . $this->search . '%')
+                ->orderByDesc('id')
+                ->paginate(5);
+        } else {
+            $employees = Employee::orderByDesc('id')->paginate(5);
+        }
 
         return view('livewire.employee-component', compact('employees'));
     }
