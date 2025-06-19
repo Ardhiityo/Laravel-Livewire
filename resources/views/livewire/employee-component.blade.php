@@ -39,7 +39,12 @@
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
-                    <button type="button" class="btn btn-primary" wire:click='store' name="submit">SIMPAN</button>
+                    @if ($isUpdate)
+                        <button type="button" class="btn btn-primary" wire:click='update'
+                            name="submit">UPDATE</button>
+                    @else
+                        <button type="button" class="btn btn-primary" wire:click='store' name="submit">SIMPAN</button>
+                    @endif
                 </div>
             </div>
         </form>
@@ -70,8 +75,8 @@
                         <td>{{ $employee->email }}</td>
                         <td>{{ $employee->address }}</td>
                         <td>
-                            <a href="" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="" class="btn btn-danger btn-sm">Del</a>
+                            <button wire:click='edit({{ $employee->id }})' class="btn btn-warning btn-sm">Edit</button>
+                            <button class="btn btn-danger btn-sm">Del</button>
                         </td>
                     </tr>
                 @endforeach
