@@ -17,7 +17,7 @@
     @endif
 
     <div class="my-3 p-3 bg-body rounded shadow-sm">
-        <form wire:submit.prevent='submit'>
+        <form>
             <div class="mb-3 row">
                 <label for="nama" class="col-sm-2 col-form-label">Nama</label>
                 <div class="col-sm-10">
@@ -49,6 +49,9 @@
     <!-- START DATA -->
     <div class="my-3 p-3 bg-body rounded shadow-sm">
         <h1>Data Pegawai</h1>
+        <div class="my-3 d-flex justify-content-end">
+            {{ $employees->links() }}
+        </div>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -60,18 +63,18 @@
                 </tr>
             </thead>
             <tbody>
-                {{-- @foreach ($collection as $item) --}}
-                <tr>
-                    <td>1</td>
-                    <td>Muhammad</td>
-                    <td>muhammad@gmail.com</td>
-                    <td>Yogyakarta</td>
-                    <td>
-                        <a href="" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="" class="btn btn-danger btn-sm">Del</a>
-                    </td>
-                </tr>
-                {{-- @endforeach --}}
+                @foreach ($employees as $key => $employee)
+                    <tr>
+                        <td>{{ $employees->firstItem() + $key }}</td>
+                        <td>{{ $employee->name }}</td>
+                        <td>{{ $employee->email }}</td>
+                        <td>{{ $employee->address }}</td>
+                        <td>
+                            <a href="" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="" class="btn btn-danger btn-sm">Del</a>
+                        </td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
 

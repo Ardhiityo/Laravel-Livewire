@@ -4,12 +4,16 @@ namespace App\Livewire;
 
 use App\Models\Employee;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class EmployeeComponent extends Component
 {
+    use WithPagination;
+
     public $name;
     public $email;
     public $address;
+    protected $paginationTheme = 'bootstrap';
 
     protected $rules = [
         'name' => 'required|min:3',
@@ -31,11 +35,14 @@ class EmployeeComponent extends Component
         $this->email = '';
         $this->address = '';
 
+
         session()->flash('notes', 'Berhasil dibuat');
     }
 
     public function render()
     {
-        return view('livewire.employee-component');
+        $employees = Employee::orderByDesc('id')->paginate(1);
+
+        return view('livewire.employee-component', compact('employees'));
     }
 }
