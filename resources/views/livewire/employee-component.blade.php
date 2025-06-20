@@ -59,12 +59,23 @@
         <div class="my-3 d-flex justify-content-end">
             <input type="text" class="form-control w-25" placeholder="Cari pegawai..." wire:model.live='search'>
         </div>
-        <div class="my-3 d-flex justify-content-end">
-            {{ $employees->links() }}
+        <div class="my-3 d-flex {{ !empty($selectedEmployees) ? 'justify-content-between' : 'justify-content-end' }}">
+            @if (!empty($selectedEmployees))
+                <div>
+                    <button class="btn btn-danger" wire:click="deleteConfirm('')" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Hapus {{ count($selectedEmployees) }}
+                        data
+                    </button>
+                </div>
+            @endif
+            <div>
+                {{ $employees->links() }}
+            </div>
         </div>
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th></th>
                     <th class="col-md-1">No</th>
                     <th class="col-md-4">Nama</th>
                     <th class="col-md-3">Email</th>
@@ -75,6 +86,10 @@
             <tbody>
                 @foreach ($employees as $key => $employee)
                     <tr>
+                        <td>
+                            <input type="checkbox" wire:key='{{ $employee->id }}' wire:model.live='selectedEmployees'
+                                value="{{ $employee->id }}">
+                        </td>
                         <td>{{ $employees->firstItem() + $key }}</td>
                         <td>{{ $employee->name }}</td>
                         <td>{{ $employee->email }}</td>

@@ -2,9 +2,10 @@
 
 namespace App\Livewire;
 
-use App\Models\Employee;
 use Livewire\Component;
+use App\Models\Employee;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Log;
 
 class EmployeeComponent extends Component
 {
@@ -17,6 +18,7 @@ class EmployeeComponent extends Component
     public $isUpdate = false;
     public $search;
     protected $paginationTheme = 'bootstrap';
+    public $selectedEmployees = [];
 
 
     public function store()
@@ -70,13 +72,21 @@ class EmployeeComponent extends Component
 
     public function deleteConfirm($id)
     {
-        $this->employeeId = $id;
+        if ($id) {
+            $this->employeeId = $id;
+        } else {
+            $this->employeeId = null;
+        }
     }
 
     public function delete()
     {
-        $employee = Employee::findOrFail($this->employeeId);
-        $employee->delete();
+        if ($this->employeeId) {
+            $employee = Employee::findOrFail($this->employeeId);
+            $employee->delete();
+        } else {
+            Employee::destroy($this->selectedEmployees);
+        }
 
         $this->clear();
 
@@ -90,20 +100,19 @@ class EmployeeComponent extends Component
         $this->address = '';
         $this->isUpdate = false;
         $this->employeeId = null;
+        $this->selectedEmployees = [];
     }
 
     public function render()
     {
-        $employees = Employee::orderByDesc('id')->paginate(5);
-
         if ($this->search) {
             $employees = Employee::whereLike('name', '%' . $this->search . '%')
                 ->orWhereLike('email', '%' . $this->search . '%')
                 ->orWhereLike('address', '%' . $this->search . '%')
                 ->orderByDesc('id')
-                ->paginate(5);
+                ->paginate(2);
         } else {
-            $employees = Employee::orderByDesc('id')->paginate(5);
+            $employees = Employee::orderByDesc('id')->paginate(2);
         }
 
         return view('livewire.employee-component', compact('employees'));
