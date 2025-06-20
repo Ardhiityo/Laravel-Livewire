@@ -5,7 +5,6 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Employee;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Log;
 
 class EmployeeComponent extends Component
 {
@@ -13,12 +12,14 @@ class EmployeeComponent extends Component
 
     public $name;
     public $email;
+    public $search;
     public $address;
+    public $sortColumn = 'name';
+    public $sortDirection = 'asc';
     public $employeeId;
     public $isUpdate = false;
-    public $search;
-    protected $paginationTheme = 'bootstrap';
     public $selectedEmployees = [];
+    protected $paginationTheme = 'bootstrap';
 
 
     public function store()
@@ -103,16 +104,23 @@ class EmployeeComponent extends Component
         $this->selectedEmployees = [];
     }
 
+    public function sortable($column)
+    {
+        $this->sortColumn = $column;
+        $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+    }
+
     public function render()
     {
         if ($this->search) {
             $employees = Employee::whereLike('name', '%' . $this->search . '%')
                 ->orWhereLike('email', '%' . $this->search . '%')
                 ->orWhereLike('address', '%' . $this->search . '%')
-                ->orderByDesc('id')
+                ->orderBy($this->sortColumn, $this->sortDirection)
                 ->paginate(2);
         } else {
-            $employees = Employee::orderByDesc('id')->paginate(2);
+            $employees = Employee::orderBy($this->sortColumn, $this->sortDirection)
+                ->paginate(2);
         }
 
         return view('livewire.employee-component', compact('employees'));
